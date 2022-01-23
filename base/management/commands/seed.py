@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from src.models import User, Note, Segment
+from django.contrib.auth.models import User
+from src.models import Note, Segment
 from django.contrib.auth.hashers import make_password
 # python manage.py seed --mode=refresh
 
@@ -32,24 +33,22 @@ def clear_data():
 def create_user():
     """Creates an User and fills his data"""
     user = User(
-        firstName='John',
-        lastName='Doe',
-        email='john@doe.com',
-        hash=make_password('Password12!')
+        username="johndoe"
+        password=make_password('Password12!')
     )
     user.save()
 
-    note = Note(
-        name='First note',
-        owner=user
-    )
-    note.save()
+    # note = Note(
+    #     name='First note',
+    #     owner=user
+    # )
+    # note.save()
 
-    segment = Segment(
-        content='Very first paragraph',
-        order=0
-    )
-    segment.save()
+    # segment = Segment(
+    #     content='Very first paragraph',
+    #     order=0
+    # )
+    # segment.save()
 
 
 def run_seed(self, mode):

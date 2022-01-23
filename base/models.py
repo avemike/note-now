@@ -1,24 +1,19 @@
 from django.db import models
 
 
-class User(models.Model):
-    firstName = models.TextField()
-    lastName = models.TextField()
-    email = models.TextField()
-    hash = models.TextField()
-
-
 class Note(models.Model):
     name = models.TextField()
     createdAt = models.DateField(auto_now_add=True)
     updatedAt = models.DateField(auto_now=True)
 
-    owner = models.ForeignKey("User", on_delete=models.SET_NULL, null=True)
+    owner = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE)
 
 
 class Segment(models.Model):
     content = models.TextField()
     order = models.IntegerField()
+    note = models.ForeignKey("Note", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['order']
