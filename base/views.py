@@ -1,11 +1,9 @@
-from django.db import IntegrityError
+import json
+from os import stat
 from django.forms import ValidationError
-from django.shortcuts import render
 
-from base.serializers import RegistrationSerializer
+from base.serializers import LoginSerializer, RegistrationSerializer
 from .models import User
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
@@ -14,93 +12,44 @@ from rest_framework.response import Response
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def Register_Users(request):
+def register(request):
     try:
-        response = Response()
-        response['Cache-Control'] = 'no-cache'
+        serializer = RegistrationSerializer(
+            data=json.loads(json.dumps(request.data)))
 
-        serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             account = serializer.create()
             account.save()
 
-            token = Token.objects.get_or_create(user=account)[0].key
-
-            response["message"] = "user registered successfully"
-            response["email"] = account.email
-            response["token"] = token
-            response.status_code = 201
+            return Response({"message": "User registered successfully"}, status=201)
         else:
-            response['error'] = serializer.errors
-            response.status_code = 400
-
-        return response
-
-    except IntegrityError as e:
-        account = User.objects.get(username='')
-        account.delete()
-        raise ValidationError({"400": f'{str(e)}'})
+            return Response({"error": serializer.errors}, status=400)
 
     except KeyError as e:
-        print(e)
-        raise ValidationError({"400": f'Field {str(e)} missing'})
+        return Response({"error": f'Field {str(e)} missing'}, status=400)
 
 
-# @api_view(['POST'])
-# def login(request):
-#     email = request.POST.get('email').lower()
-#     password = request.POST.get('password')
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    try:
+        serializer = LoginSerializer(
+            json.loads(json.dumps(request.data)))
 
-#     try:
-#         user = User.objects.get(email=email)
-#     except:
-#         messages.error(request, 'User does not exist')
+        email = serializer.data['email'].lower()
+        password = serializer.data['password']
 
-#     logger.log(user)
+        try:
+            user = User.objects.get(email=email)
 
-# def loginPage(request):
-#     page = 'login'
-#     if request.user.is_authenticated:
-#         return
+            if not User.check_password(user, password):
+                raise ValidationError()
 
-#     if request.method == 'POST':
-#         email = request.POST.get('email').lower()
-#         password = request.POST.get('password')
+            token = Token.objects.get_or_create(user=user)[0].key
 
-#         try:
-#             user = User.objects.get(email=email)
-#         except:
-#             messages.error(request, 'User does not exist')
+            return Response({"token": token}, status=200)
+        except:
+            return Response({"error": "User does not exist or credentials do not match"}, status=404)
 
-#         user = authenticate(request, email=email, password=password)
-
-#         if user is not None:
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             messages.error(request, 'Username OR password does not exit')
-
-#     context = {'page': page}
-#     return render(request, 'base/login_register.html', context)
-
-
-# def logoutUser(request):
-#     logout(request)
-#     return redirect('home')
-
-
-# def registerPage(request):
-#     form = MyUserCreationForm()
-
-#     if request.method == 'POST':
-#         form = MyUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.username = user.username.lower()
-#             user.save()
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             messages.error(request, 'An error occurred during registration')
-
-#     return render(request, 'base/login_register.html', {'form': form})
+    except KeyError as e:
+        return Response({"error": f'Field {str(e)} missing'}, status=400)
