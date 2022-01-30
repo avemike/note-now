@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+DEFAULT_NOTE_ID = 1
+
+
 class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
@@ -21,7 +24,8 @@ class Note(models.Model):
 class Segment(models.Model):
     content = models.TextField()
     order = models.IntegerField()
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    note = models.ForeignKey(
+        Note, on_delete=models.CASCADE, default=DEFAULT_NOTE_ID)
 
     class Meta:
         ordering = ['order']
