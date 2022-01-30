@@ -46,8 +46,20 @@ INSTALLED_APPS = [
     'base',
 
     'rest_framework',
+    "rest_framework.authtoken",
+
     'corsheaders'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
 
 AUTH_USER_MODEL = 'base.User'
 
