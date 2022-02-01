@@ -32,6 +32,9 @@ class Note(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (('owner', 'name'))
+
 
 class Segment(models.Model):
     content = models.TextField()
@@ -41,3 +44,4 @@ class Segment(models.Model):
 
     class Meta:
         ordering = ['order']
+        unique_together = (('note', 'order'))
