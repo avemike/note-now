@@ -1,13 +1,9 @@
-import json
-from nis import match
-from django.forms import ValidationError
 from django.http import HttpRequest, HttpResponseBadRequest
 
-from base.serializers import NoteSerializer, UserSerializer
-from ..models import Note, User
+from base.serializers import NoteSerializer
+from ..models import Note
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.core.serializers import serialize
 
