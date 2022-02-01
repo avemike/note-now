@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponseNotAllowed
 
-from base.serializers import GetSegmentsSerializer, SegmentSerializer
+from base.serializers import GetSegmentsSerializer, PostSegmentSerializer
 from ..models import Note, Segment
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -12,17 +12,18 @@ from django.core.serializers import serialize
 @permission_classes([IsAuthenticated])
 def create_segment(request: HttpRequest):
     try:
-        serializer = SegmentSerializer(
+        serializer = PostSegmentSerializer(
             data={
                 'content': request.data['content'],
-                'order': request.data['order'],
                 'note': request.data['note']})
 
         if serializer.is_valid():
-            note = serializer.create()
-            note.save()
+            segment = serializer.create()
+            segment.save()
 
-            return Response({"message": "Note created successfully"}, status=201)
+            data = serialize('json', [segment])
+
+            return Response({"message": "Segment created successfully", "data": data}, status=201)
         else:
             return Response({"error": serializer.errors}, status=400)
 
@@ -52,3 +53,22 @@ def get_segments(request: HttpRequest, note):
 
     except KeyError as e:
         return Response({"error": f'Field {str(e)} missing'}, status=400)
+
+
+# @api_view(['PATCH'])
+# @permission_classes([IsAuthenticated])
+# def patch_segment(request: HttpRequest, index: int):
+#     try:
+#         serializer = NoteSerializer(
+#             data={'name': request.data['name'], 'owner': request.user.id})
+
+#         if serializer.is_valid():
+#             note = serializer.create()
+#             note.save()
+
+#             return Response({"message": "Note created successfully"}, status=201)
+#         else:
+#             return Response({"error": serializer.errors}, status=400)
+
+#     except KeyError as e:
+#         return Response({"error": f'Field {str(e)} missing'}, status=400)

@@ -1,4 +1,3 @@
-from dataclasses import fields
 from rest_framework import serializers
 
 from base.models import Note, Segment, User
@@ -31,7 +30,25 @@ class NoteSerializer(serializers.ModelSerializer):
         return Note(name=self.validated_data['name'], owner=self.validated_data['owner'])
 
 
-class SegmentSerializer(serializers.ModelSerializer):
+class PostSegmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Segment
+        fields = [
+            "content",
+            "note"
+        ]
+
+    def create(self) -> Segment:
+        order = (Segment.objects.filter(
+            note=self.validated_data['note'])).count() + 1
+
+        return Segment(
+            content=self.validated_data['content'],
+            order=order,
+            note=self.validated_data['note'])
+
+
+class PostSegmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Segment
         fields = [
@@ -41,9 +58,12 @@ class SegmentSerializer(serializers.ModelSerializer):
         ]
 
     def create(self) -> Segment:
+        order = (Segment.objects.filter(
+            note=self.validated_data['note'])).count() + 1
+
         return Segment(
             content=self.validated_data['content'],
-            order=self.validated_data['order'],
+            order=order,
             note=self.validated_data['note'])
 
 
