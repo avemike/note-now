@@ -1,5 +1,5 @@
+import React, { Suspense } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
-import React, { Suspense, useState } from "react";
 import ReactDOM from "react-dom";
 
 const theme = createTheme({});

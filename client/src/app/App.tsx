@@ -1,9 +1,9 @@
 import { Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
+import Layout from "./Layout";
 import { AuthProvider } from "./auth/AuthContext";
 import { PageLoader } from "./components/PageLoader";
-import Layout from "./Layout";
 import { Navigation } from "./navigation";
 import { NotFoundPage } from "./pages/NotFoundPage";
 

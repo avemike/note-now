@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -26,8 +26,12 @@ export const AuthContext = React.createContext<{
     remember: boolean
   ) => void;
 }>({
-  logout: () => {},
-  loginWithPassword: () => {},
+  logout: () => {
+    /* empty */
+  },
+  loginWithPassword: () => {
+    /* empty */
+  },
 });
 
 export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({

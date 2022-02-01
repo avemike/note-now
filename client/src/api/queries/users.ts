@@ -1,5 +1,5 @@
-import { request } from "../request";
 import { API } from "..";
+import { request } from "../request";
 
 export const login = (email: string, password: string): Promise<any> =>
   request("/login", {
