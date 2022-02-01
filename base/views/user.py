@@ -1,5 +1,6 @@
 import json
 from django.forms import ValidationError
+from django.http import HttpRequest
 
 from base.serializers import UserSerializer
 from ..models import User
@@ -12,7 +13,7 @@ from django.core.serializers import serialize
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
-def register(request):
+def register(request: HttpRequest):
     try:
         serializer = UserSerializer(
             data=json.loads(json.dumps(request.data)))
@@ -31,7 +32,7 @@ def register(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def login(request):
+def login(request: HttpRequest):
     try:
         serializer = UserSerializer(
             json.loads(json.dumps(request.data)))
@@ -57,7 +58,7 @@ def login(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def users(requst):
+def users(requst: HttpRequest):
     data = serialize('json', User.objects.all())
 
     return Response({"data": data}, status=200)
