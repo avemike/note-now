@@ -1,11 +1,13 @@
 import { Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Layout from "./Layout";
 import { AuthProvider } from "./auth/AuthContext";
 import { PageLoader } from "./components/PageLoader";
 import { Navigation } from "./navigation";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +26,17 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <BrowserRouter basename={"/web"}>
         <Routes>
           <Route

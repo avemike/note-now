@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { API } from "../../api";
-import { login } from "../../api/queries";
+import { login as loginQuery } from "../../api/queries";
 import { PageLoader } from "../components/PageLoader";
 import { AnonymousRoutes, Navigation } from "../navigation";
 
@@ -20,16 +20,12 @@ function setAuthorizationHeader(token: string) {
 
 export const AuthContext = React.createContext<{
   logout: () => void;
-  loginWithPassword: (
-    email: string,
-    password: string,
-    remember: boolean
-  ) => void;
+  login: (email: string, password: string) => void;
 }>({
   logout: () => {
     /* empty */
   },
-  loginWithPassword: () => {
+  login: () => {
     /* empty */
   },
 });
@@ -55,10 +51,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     setAuthorizationHeader(token);
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     updateAccessToken("");
     queryClient.clear();
-  };
+  }, []);
 
   useEffect(() => {
     API.fetch = async (input: RequestInfo, init?: RequestInit) => {
@@ -72,9 +68,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logout]);
 
-  const loginWithPassword = async (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     try {
-      const response = await login(email, password);
+      const response = await loginQuery(email, password);
       if (response?.token) {
         setAuthorizationHeader(response.token);
 
@@ -104,7 +100,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   }, [accessToken, location.pathname]);
 
   return (
-    <AuthContext.Provider value={{ logout, loginWithPassword }}>
+    <AuthContext.Provider value={{ logout, login: login }}>
       {ready ? (
         children
       ) : (
