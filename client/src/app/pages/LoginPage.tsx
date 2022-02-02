@@ -34,9 +34,6 @@ export function LoginPage() {
       onError: () => {
         toast.error("Login failed");
       },
-      onSuccess: () => {
-        toast.success("Login successful!");
-      },
     }
   );
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { API } from "../../api";
 import { login as loginQuery } from "../../api/queries";
@@ -12,7 +12,7 @@ const tokenKey = "accessToken";
 
 function setAuthorizationHeader(token: string) {
   if (token) {
-    API.config.globalHeaders["Authorization"] = "Bearer " + token;
+    API.config.globalHeaders["Authorization"] = "Token " + token;
   } else if ("Authorization" in API.config.globalHeaders) {
     delete API.config.globalHeaders["Authorization"];
   }
@@ -35,6 +35,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const location = useLocation();
 
   const [accessToken, setAccessToken] = useState(
     sessionStorage.getItem(tokenKey) ?? ""
@@ -75,10 +76,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         setAuthorizationHeader(response.token);
 
         updateAccessToken(response.token);
-        toast({
-          title: "Successful login",
-          status: "success",
-        });
+        toast.success("Successful login");
       } else {
         updateAccessToken("");
       }
@@ -100,7 +98,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   }, [accessToken, location.pathname]);
 
   return (
-    <AuthContext.Provider value={{ logout, login: login }}>
+    <AuthContext.Provider value={{ logout, login }}>
       {ready ? (
         children
       ) : (
