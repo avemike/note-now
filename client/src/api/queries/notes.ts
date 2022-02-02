@@ -1,7 +1,7 @@
 import { API } from "..";
 import { request } from "../request";
 
-export const getNotes = (): Promise<any> =>
+export const getNotes = (): Promise<{ data: string }> =>
   request(`${API.config.baseUrl}/notes`, {
     method: "GET",
     headers: API.config.globalHeaders,
