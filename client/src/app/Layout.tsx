@@ -10,7 +10,7 @@ export function Layout({
   const location = useLocation();
 
   switch (location.pathname) {
-    case Navigation.LOGIN.path:
+    case Navigation.WELCOME_PAGE.path:
       return <Box>{children}</Box>;
   }
 

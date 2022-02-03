@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         navigate(Navigation.DEFAULT_PAGE.path);
       }
     } else if (!AnonymousRoutes.includes(location.pathname as never)) {
-      navigate(Navigation.LOGIN.path);
+      navigate(Navigation.WELCOME_PAGE.path);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, location.pathname]);

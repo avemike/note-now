@@ -27,7 +27,7 @@ export function HomePage() {
     active: index === active,
   }));
 
-  const { mutate: postSegment } = usePostSegment(notes?.[active].pk || 0);
+  const { mutate: postSegment } = usePostSegment(notes?.[active]?.pk || 0);
   const parsedSegments = (segments || []).map((segment) => ({
     ...segment.fields,
     pk: segment.pk,
@@ -38,22 +38,24 @@ export function HomePage() {
   return (
     <ContentWithNotesSidebar notes={parsedNotes} setActive={setActive}>
       <Box>
-        <Container maxWidth="md">
-          <Box padding={"4rem 0"}>
-            <StyledTitle variant="h2" marginBottom={"4rem"}>
-              {title}
-            </StyledTitle>
-            <CreateSegment
-              order={
-                (parsedSegments[parsedSegments.length - 1]?.order || -1) + 1
-              }
-              postSegment={postSegment}
-            />
-            {parsedSegments.map((data) => (
-              <EditableSegment data={data} key={data.order} />
-            ))}
-          </Box>
-        </Container>
+        {parsedNotes.length !== 0 && (
+          <Container maxWidth="md">
+            <Box padding={"4rem 0"}>
+              <StyledTitle variant="h2" marginBottom={"4rem"}>
+                {title}
+              </StyledTitle>
+              <CreateSegment
+                order={
+                  (parsedSegments[parsedSegments.length - 1]?.order || -1) + 1
+                }
+                postSegment={postSegment}
+              />
+              {parsedSegments.map((data) => (
+                <EditableSegment data={data} key={data.order} />
+              ))}
+            </Box>
+          </Container>
+        )}
       </Box>
     </ContentWithNotesSidebar>
   );

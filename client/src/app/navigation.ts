@@ -1,10 +1,10 @@
 import { HomePage } from "./pages/HomePage";
-import { LoginPage } from "./pages/LoginPage";
+import { WelcomePage } from "./pages/welcomePage/WelcomePage";
 
 const Routes = {
-  LOGIN: {
-    path: "/login",
-    component: LoginPage,
+  WELCOME_PAGE: {
+    path: "/welcome_page",
+    component: WelcomePage,
   },
   HOME: {
     path: "/home",
@@ -12,7 +12,7 @@ const Routes = {
   },
 } as const;
 
-export const AnonymousRoutes = [Routes.LOGIN.path];
+export const AnonymousRoutes = [Routes.WELCOME_PAGE.path];
 
 export const Navigation = {
   ...Routes,

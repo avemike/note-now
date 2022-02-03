@@ -23,7 +23,7 @@ export function CreateSegment({
   const ref = useRef<HTMLTextAreaElement>(null);
 
   return (
-    <SegmentWrapper>
+    <SegmentWrapper ghost={true}>
       <StyledTextArea
         value={value}
         ref={ref}
