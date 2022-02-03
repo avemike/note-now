@@ -4,7 +4,7 @@ import { getSegments } from "../queries/segments";
 interface Segment {
   fields: {
     content: string;
-    order: string;
+    order: number;
   };
 }
 

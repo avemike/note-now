@@ -53,7 +53,6 @@ class PostSegmentSerializer(serializers.ModelSerializer):
         model = Segment
         fields = [
             "content",
-            "order",
             "note"
         ]
 

@@ -1,20 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { Container, Box, Typography, TextareaAutosize } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import { useNotes } from "../../api/hooks/useNotes";
+import { usePostSegment } from "../../api/hooks/usePostSegment";
 import { useSegments } from "../../api/hooks/useSegments";
 import { ContentWithNotesSidebar } from "../components/ContentWithNotesSidebar";
+import { CreateSegment } from "../components/CreateSegment";
+import { EditableSegment } from "../components/EditableSegment";
 
 const StyledTitle = styled(Typography)`
   text-transform: uppercase;
-`;
-
-const StyledTextArea = styled(TextareaAutosize)`
-  width: 100%;
-  font-size: 18px;
-  border: transparent;
-  resize: none;
-  font-family: "Roboto";
 `;
 
 export function HomePage() {
@@ -31,6 +27,7 @@ export function HomePage() {
     active: index === active,
   }));
 
+  const { mutate: postSegment } = usePostSegment(notes?.[active].pk || 0);
   const parsedSegments = (segments || []).map((segment) => segment.fields);
 
   const title = parsedNotes[active]?.name ?? "None";
@@ -40,15 +37,17 @@ export function HomePage() {
       <Box>
         <Container maxWidth="md">
           <Box padding={"4rem 0"}>
-            <StyledTitle variant="h2">{title}</StyledTitle>
+            <StyledTitle variant="h2" marginBottom={"4rem"}>
+              {title}
+            </StyledTitle>
             {parsedSegments.map((data) => (
-              <StyledTextArea
-                key={data.order}
-                value={data.content}
-                minRows={3}
-              />
+              <EditableSegment data={data} key={data.order} />
             ))}
           </Box>
+          <CreateSegment
+            order={(parsedSegments[parsedSegments.length - 1]?.order || -1) + 1}
+            postSegment={postSegment}
+          />
         </Container>
       </Box>
     </ContentWithNotesSidebar>
