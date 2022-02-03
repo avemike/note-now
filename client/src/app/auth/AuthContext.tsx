@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   );
   const [ready, setReady] = useState(false);
 
-  const updateAccessToken = (token: string) => {
+  const updateAccessToken = useCallback<(token: string) => void>((token) => {
     setAccessToken(token);
     if (token) {
       sessionStorage.setItem(tokenKey, token);
@@ -50,12 +50,12 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       sessionStorage.removeItem(tokenKey);
     }
     setAuthorizationHeader(token);
-  };
+  }, []);
 
   const logout = useCallback(() => {
     updateAccessToken("");
     queryClient.clear();
-  }, []);
+  }, [updateAccessToken, queryClient]);
 
   useEffect(() => {
     API.fetch = async (input: RequestInfo, init?: RequestInit) => {
@@ -68,6 +68,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     setReady(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logout]);
+
+  useEffect(() => {
+    setAuthorizationHeader(accessToken);
+  }, [accessToken]);
 
   const login = async (email: string, password: string) => {
     try {
