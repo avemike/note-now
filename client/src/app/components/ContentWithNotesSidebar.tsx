@@ -13,6 +13,7 @@ const StyledTitle = styled(Typography)`
 const StyledSidebar = styled(Box)`
   width: 20%;
   padding: 4px;
+  overflow-y: scroll;
 `;
 
 const StyledNote = styled(Box)<{ active: boolean }>`
@@ -41,9 +42,11 @@ const AddNote = styled(Box)<{ active: boolean }>`
 export function ContentWithNotesSidebar({
   notes,
   children,
+  setActive,
 }: {
   children: ReactNode;
   notes: { name: string; active: boolean }[];
+  setActive: (arg: number) => void;
 }) {
   const [addNoteFocused, setAddNoteFocused] = React.useState(false);
   const onAddNoteFocus = () => setAddNoteFocused(true);
@@ -60,13 +63,19 @@ export function ContentWithNotesSidebar({
   };
 
   return (
-    <Box width={"100%"} minHeight={"100vh"} display={"flex"}>
-      <Box width={"80%"}>{children}</Box>
+    <Box width={"100%"} height={"100vh"} overflow={"hidden"} display={"flex"}>
+      <Box width={"80%"} overflow={"scroll"}>
+        {children}
+      </Box>
       <StyledSidebar>
         <StyledTitle variant="h5">Notes</StyledTitle>
         <Stack spacing={"2em"}>
-          {notes.map((note) => (
-            <StyledNote key={note.name} active={note.active}>
+          {notes.map((note, index) => (
+            <StyledNote
+              key={note.name}
+              active={note.active}
+              onClick={() => setActive(index)}
+            >
               <Typography
                 variant="body2"
                 fontWeight={600}

@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import styled from "@emotion/styled";
+import { Container, Box, Typography } from "@mui/material";
 import { useNotes } from "../../api/hooks/useNotes";
 import { ContentWithNotesSidebar } from "../components/ContentWithNotesSidebar";
 
+const StyledTitle = styled(Typography)`
+  text-transform: uppercase;
+`;
 export function HomePage() {
-  const [active, _setActive] = useState(0);
+  const [active, setActive] = useState(0);
   const { data: notes } = useNotes();
 
   const parsedNotes = (notes || []).map((note, index) => ({
@@ -12,15 +16,16 @@ export function HomePage() {
     active: index === active,
   }));
 
+  const title = parsedNotes[active]?.name ?? "None";
+
   return (
-    <ContentWithNotesSidebar notes={parsedNotes}>
-      <Box
-        height={"100vh"}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography variant="h1">Home Page</Typography>
+    <ContentWithNotesSidebar notes={parsedNotes} setActive={setActive}>
+      <Box>
+        <Container maxWidth="md">
+          <Box padding={"4rem 0"}>
+            <StyledTitle variant="h2">{title}</StyledTitle>
+          </Box>
+        </Container>
       </Box>
     </ContentWithNotesSidebar>
   );
