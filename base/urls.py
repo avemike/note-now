@@ -13,7 +13,6 @@ urlpatterns = [
 
     # SEGMENTS
     path('segments', segment.create_segment, name="segments"),
-    path('segments/<int:note>/', segment.get_segments, name="get_segments"),
-    # path('segments/<int:note>/<int:index>',
-    #      segment.patch_segment, name="patch_segments"),
+    path('segments/note/<int:note>/', segment.get_segments, name="get_segments"),
+    path('segments/<int:segment>/', segment.modify_segment, name="modify_segment")
 ]

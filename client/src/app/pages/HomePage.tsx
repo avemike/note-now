@@ -28,7 +28,10 @@ export function HomePage() {
   }));
 
   const { mutate: postSegment } = usePostSegment(notes?.[active].pk || 0);
-  const parsedSegments = (segments || []).map((segment) => segment.fields);
+  const parsedSegments = (segments || []).map((segment) => ({
+    ...segment.fields,
+    pk: segment.pk,
+  }));
 
   const title = parsedNotes[active]?.name ?? "None";
 

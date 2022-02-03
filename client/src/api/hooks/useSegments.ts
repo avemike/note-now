@@ -6,6 +6,7 @@ interface Segment {
     content: string;
     order: number;
   };
+  pk: number;
 }
 
 export function useSegments({

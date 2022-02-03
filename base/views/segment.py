@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponseNotAllowed
 
-from base.serializers import GetSegmentsSerializer, PostSegmentSerializer
+from base.serializers import GetSegmentsSerializer, PatchSegmentSerializer, PostSegmentSerializer
 from ..models import Note, Segment
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -31,8 +31,36 @@ def create_segment(request: HttpRequest):
         return Response({"error": f'Field {str(e)} missing'}, status=400)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+def patch_segment(request: HttpRequest, segment: int):
+    try:
+        serializer = PatchSegmentSerializer(
+            data={"content": request.data["content"],
+                  "segment": segment})
+
+        if serializer.is_valid():
+            serializer.update()
+
+            return Response({"message": "Segment updated successfully"}, status=200)
+        else:
+            return Response({"error": serializer.errors}, status=400)
+
+    except KeyError as e:
+        return Response({"error": f'Field {str(e)} missing'}, status=400)
+
+
+@ api_view(['PATCH', 'DELETE'])
+@ permission_classes([IsAuthenticated])
+def modify_segment(request: HttpRequest, segment: int):
+    if(request.method == 'PATCH'):
+        return patch_segment(request=request, segment=segment)
+    # elif(request.method == 'DELETE'):
+    #     return create_note(request=request)
+    else:
+        return HttpResponseBadRequest()
+
+
+@ api_view(['GET'])
+@ permission_classes([IsAuthenticated])
 def get_segments(request: HttpRequest, note):
     try:
         serializer = GetSegmentsSerializer(data={'note': note})

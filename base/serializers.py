@@ -48,22 +48,30 @@ class PostSegmentSerializer(serializers.ModelSerializer):
             note=self.validated_data['note'])
 
 
-class PostSegmentSerializer(serializers.ModelSerializer):
+class PatchSegmentSerializer(serializers.ModelSerializer):
+    segment = serializers.IntegerField()
+
     class Meta:
         model = Segment
         fields = [
             "content",
-            "note"
+            "segment"
         ]
 
-    def create(self) -> Segment:
-        order = (Segment.objects.filter(
-            note=self.validated_data['note'])).count() + 1
+    def update(self) -> Segment:
+        segment = Segment.objects.get(pk=self.validated_data['segment'])
 
-        return Segment(
-            content=self.validated_data['content'],
-            order=order,
-            note=self.validated_data['note'])
+        segment.content = self.validated_data["content"]
+
+        segment.save()
+
+
+class DeleteSegmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Segment
+        fields = [
+            "pk",
+        ]
 
 
 class GetSegmentsSerializer(serializers.ModelSerializer):
