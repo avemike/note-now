@@ -64,8 +64,8 @@ def delete_segment(request: HttpRequest, segment: int):
         return Response({"error": f'Field {str(e)} missing'}, status=400)
 
 
-@ api_view(['PATCH', 'DELETE'])
-@ permission_classes([IsAuthenticated])
+@api_view(['PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def modify_segment(request: HttpRequest, segment: int):
     if(request.method == 'PATCH'):
         return patch_segment(request=request, segment=segment)
@@ -75,8 +75,8 @@ def modify_segment(request: HttpRequest, segment: int):
         return HttpResponseBadRequest()
 
 
-@ api_view(['GET'])
-@ permission_classes([IsAuthenticated])
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_segments(request: HttpRequest, note):
     try:
         serializer = GetSegmentsSerializer(data={'note': note})
@@ -97,22 +97,3 @@ def get_segments(request: HttpRequest, note):
 
     except KeyError as e:
         return Response({"error": f'Field {str(e)} missing'}, status=400)
-
-
-# @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
-# def patch_segment(request: HttpRequest, index: int):
-#     try:
-#         serializer = NoteSerializer(
-#             data={'name': request.data['name'], 'owner': request.user.id})
-
-#         if serializer.is_valid():
-#             note = serializer.create()
-#             note.save()
-
-#             return Response({"message": "Note created successfully"}, status=201)
-#         else:
-#             return Response({"error": serializer.errors}, status=400)
-
-#     except KeyError as e:
-#         return Response({"error": f'Field {str(e)} missing'}, status=400)
