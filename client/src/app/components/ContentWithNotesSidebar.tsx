@@ -19,10 +19,10 @@ const StyledSidebar = styled(Box)`
 const StyledNote = styled(Box)<{ active: boolean }>`
   width: 100%;
   padding: 1rem 2rem;
-  background: ${(props) => (props.active ? "#FFFA96" : "#fefaae")};
+  background: ${(props) => (props.active ? "#FFF873" : "#FFFCBF")};
   border: 2px solid #000;
   box-shadow: ${(props) =>
-    props.active ? "2px 2px 0 0 #000" : "4px 4px 0 0 #000"};
+    props.active ? "1px 1px 0 0 #000" : "4px 4px 0 0 #000"};
   transition: all 240ms;
   cursor: pointer;
 `;
@@ -30,10 +30,10 @@ const StyledNote = styled(Box)<{ active: boolean }>`
 const AddNote = styled(Box)<{ active: boolean }>`
   width: 100%;
   padding: 1rem 2rem;
-  background: #fefaae;
+  background: #fffcbf;
   border: 2px solid #000;
   box-shadow: ${(props) =>
-    props.active ? "2px 2px 0 0 #000" : "4px 4px 0 0 #000"};
+    props.active ? "1px 1px 0 0 #000" : "4px 4px 0 0 #000"};
   transition: all 240ms;
   cursor: pointer;
   opacity: ${(props) => (props.active ? "100%" : "50%")};

@@ -3,6 +3,9 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import ReactDOM from "react-dom";
 
 const theme = createTheme({
+  typography: {
+    fontFamily: "Roboto",
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
