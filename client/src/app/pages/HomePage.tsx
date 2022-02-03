@@ -43,14 +43,16 @@ export function HomePage() {
             <StyledTitle variant="h2" marginBottom={"4rem"}>
               {title}
             </StyledTitle>
+            <CreateSegment
+              order={
+                (parsedSegments[parsedSegments.length - 1]?.order || -1) + 1
+              }
+              postSegment={postSegment}
+            />
             {parsedSegments.map((data) => (
               <EditableSegment data={data} key={data.order} />
             ))}
           </Box>
-          <CreateSegment
-            order={(parsedSegments[parsedSegments.length - 1]?.order || -1) + 1}
-            postSegment={postSegment}
-          />
         </Container>
       </Box>
     </ContentWithNotesSidebar>
