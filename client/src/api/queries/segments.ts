@@ -34,3 +34,9 @@ export const patchSegment = ({
     body: JSON.stringify({ content }),
     headers: API.config.globalHeaders,
   });
+
+export const deleteSegment = (pk: number): Promise<any> =>
+  request(`${API.config.baseUrl}/segments/${pk}/`, {
+    method: "DELETE",
+    headers: API.config.globalHeaders,
+  });

@@ -67,11 +67,18 @@ class PatchSegmentSerializer(serializers.ModelSerializer):
 
 
 class DeleteSegmentSerializer(serializers.ModelSerializer):
+    segment = serializers.IntegerField()
+
     class Meta:
         model = Segment
         fields = [
-            "pk",
+            "segment",
         ]
+
+    def delete(self) -> Segment:
+        segment = Segment.objects.get(pk=self.validated_data['segment'])
+
+        segment.delete()
 
 
 class GetSegmentsSerializer(serializers.ModelSerializer):

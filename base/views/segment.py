@@ -1,6 +1,5 @@
-from django.http import HttpRequest, HttpResponseNotAllowed
-
-from base.serializers import GetSegmentsSerializer, PatchSegmentSerializer, PostSegmentSerializer
+from django.http import HttpRequest, HttpResponseBadRequest, HttpResponseNotAllowed
+from base.serializers import GetSegmentsSerializer, PatchSegmentSerializer, PostSegmentSerializer, DeleteSegmentSerializer
 from ..models import Note, Segment
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -48,13 +47,30 @@ def patch_segment(request: HttpRequest, segment: int):
         return Response({"error": f'Field {str(e)} missing'}, status=400)
 
 
+def delete_segment(request: HttpRequest, segment: int):
+    try:
+        serializer = DeleteSegmentSerializer(
+            data={"segment": segment},
+        )
+
+        if serializer.is_valid():
+            serializer.delete()
+
+            return Response({"message": "Segment deleted successfully"}, status=200)
+        else:
+            return Response({"error": serializer.errors}, status=400)
+
+    except KeyError as e:
+        return Response({"error": f'Field {str(e)} missing'}, status=400)
+
+
 @ api_view(['PATCH', 'DELETE'])
 @ permission_classes([IsAuthenticated])
 def modify_segment(request: HttpRequest, segment: int):
     if(request.method == 'PATCH'):
         return patch_segment(request=request, segment=segment)
-    # elif(request.method == 'DELETE'):
-    #     return create_note(request=request)
+    elif(request.method == 'DELETE'):
+        return delete_segment(request=request, segment=segment)
     else:
         return HttpResponseBadRequest()
 

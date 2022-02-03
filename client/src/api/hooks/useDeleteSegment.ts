@@ -1,21 +1,21 @@
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
-import { patchSegment } from "../queries/segments";
+import { deleteSegment } from "../queries/segments";
 
-export function usePatchSegment(pk: number) {
+export function useDeleteSegment(pk: number) {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ["patchSegment"],
-    async ({ content }: { content: string }) => {
-      await patchSegment({ content, pk });
+    ["deleteSegment"],
+    async () => {
+      await deleteSegment(pk);
     },
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["segments"]);
       },
       onError: () => {
-        toast.error("Cannot create a segment :(");
+        toast.error("Cannot delete a segment :(");
       },
     }
   );
