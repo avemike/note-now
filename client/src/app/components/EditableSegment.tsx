@@ -46,6 +46,7 @@ export function EditableSegment({
         }}
         onBlur={() => {
           if (value) patchSegment({ content: value });
+          else deleteSegment();
         }}
         minRows={1}
       />

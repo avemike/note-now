@@ -37,6 +37,8 @@ export function CreateSegment({
         }}
         onBlur={() => {
           if (value) postSegment({ content: value, order });
+
+          setValue("");
         }}
         minRows={1}
       />

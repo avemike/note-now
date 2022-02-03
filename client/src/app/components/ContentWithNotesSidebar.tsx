@@ -60,6 +60,7 @@ export function ContentWithNotesSidebar({
     e.preventDefault();
 
     postNote(newNoteName);
+    setNewNoteName("");
   };
 
   return (
