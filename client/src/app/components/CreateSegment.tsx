@@ -31,6 +31,7 @@ export function CreateSegment({
         onChange={(e) => {
           if (e.target.value[e.target.value.length - 1] === "\n") {
             ref?.current?.blur();
+            return;
           }
 
           setValue(e.target.value);

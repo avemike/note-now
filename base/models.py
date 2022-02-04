@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 DEFAULT_NOTE_ID = 1
 
 
+# User manager is needed to overwrite create_superuser.
+# I want to use only email and password, nothing more.
 class UserManager(BaseUserManager):
     def create(self):
         user = User(email=self.validated_data['email'])

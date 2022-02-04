@@ -82,6 +82,8 @@ def get_segments(request: HttpRequest, note):
         serializer = GetSegmentsSerializer(data={'note': note})
 
         if serializer.is_valid():
+
+            # Check if requested segments belongs to the user
             if Note.objects.filter(
                 pk=note,
                 owner=request.user.id

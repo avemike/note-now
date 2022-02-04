@@ -10,6 +10,8 @@ MODE_REFRESH = 'refresh'
 MODE_CLEAR = 'clear'
 
 
+# ./manage.py seed --mode clear -> clears db
+# ./manage.py seed              -> fills db
 class Command(BaseCommand):
     help = "seed database for testing and development."
 
@@ -31,6 +33,7 @@ def clear_data():
 
 def run_seed(self, mode):
     """ Seed database """
+
     # Clear data from tables
     clear_data()
     if mode == MODE_CLEAR:
