@@ -1,8 +1,5 @@
 ## Note now - django project
 
-### wejście do środowiska - LINUX (wymagane do dalszych poleceń):
-  - `source ./env/bin/activate`
-
 ### jak wystartować?
   - Server (API)
     1. python3 -m venv env
