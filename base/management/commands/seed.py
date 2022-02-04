@@ -1,65 +1,67 @@
-# from django.core.management.base import BaseCommand
-# from django.contrib.auth.models import User
-# from src.models import Note, Segment
-# from django.contrib.auth.hashers import make_password
-# # python manage.py seed --mode=refresh
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
+from base.models import User, Note, Segment
+import lorem
 
-# """ Clear all data and seed """
-# MODE_REFRESH = 'refresh'
+""" Clear all data and seed """
+MODE_REFRESH = 'refresh'
 
-# """ Clear all data  """
-# MODE_CLEAR = 'clear'
-
-
-# class Command(BaseCommand):
-#     help = "seed database for testing and development."
-
-#     def add_arguments(self, parser):
-#         parser.add_argument('--mode', type=str, help="Mode")
-
-#     def handle(self, *args, **options):
-#         self.stdout.write('seeding data...')
-#         run_seed(self, options['mode'])
-#         self.stdout.write('done.')
+""" Clear all data  """
+MODE_CLEAR = 'clear'
 
 
-# def clear_data():
-#     """Deletes all the table data"""
-#     User.objects.all().delete()
-#     Note.objects.all().delete()
-#     Segment.objects.all().delete()
+class Command(BaseCommand):
+    help = "seed database for testing and development."
+
+    def add_arguments(self, parser):
+        parser.add_argument('--mode', type=str, help="Mode")
+
+    def handle(self, *args, **options):
+        self.stdout.write('seeding data...')
+        run_seed(self, options['mode'])
+        self.stdout.write('done.')
 
 
-# def create_user():
-#     """Creates an User and fills his data"""
-#     user = User(
-#         username="johndoe"
-#         password=make_password('Password12!')
-#     )
-#     user.save()
-
-#     # note = Note(
-#     #     name='First note',
-#     #     owner=user
-#     # )
-#     # note.save()
-
-#     # segment = Segment(
-#     #     content='Very first paragraph',
-#     #     order=0
-#     # )
-#     # segment.save()
+def clear_data():
+    """ Clear database """
+    User.objects.all().delete()
+    Note.objects.all().delete()
+    Segment.objects.all().delete()
 
 
-# def run_seed(self, mode):
-#     """ Seed database based on mode
+def run_seed(self, mode):
+    """ Seed database """
+    # Clear data from tables
+    clear_data()
+    if mode == MODE_CLEAR:
+        clear_data()
+        return
 
-#     :param mode: refresh / clear
-#     :return:
-#     """
-#     # Clear data from tables
-#     clear_data()
-#     if mode == MODE_CLEAR:
-#         return
+    user = User(email="user@user.com")
+    user.set_password("Password12!")
+    user.save()
 
-#     create_user()
+    note1 = Note(name="Notatki z angielskiego", owner=user)
+    note2 = Note(name="Notatki z lorem ipsum", owner=user)
+    note3 = Note(name="Różne notatki", owner=user)
+    note4 = Note(name="Kolejne bardzo różne notatki", owner=user)
+    note5 = Note(name="Brak notatek", owner=user)
+
+    note1.save()
+    note2.save()
+    note3.save()
+    note4.save()
+    note5.save()
+
+    segments1 = [
+        Segment(content="Past - Present - Future", order=1, note=note1),
+        Segment(content="He read a book yesterday", order=2, note=note1),
+        Segment(content="Book - książka", order=3, note=note1),
+        Segment(content="He will be reading a book tomorrow", order=4, note=note1)
+    ]
+
+    for segment in segments1:
+        segment.save()
+
+    for i in range(0, 20):
+        Segment(content=lorem.sentence(), order=i+1, note=note2).save()
